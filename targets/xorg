@@ -217,8 +217,18 @@ else
     rm -f "$xorgconf"
 fi
 
-# Fix launching X11 from inside crosh (user doesn't own a TTY)
-echo 'allowed_users=anybody' > '/etc/X11/Xwrapper.config'
+if [ "${DISTROAKA:-"$DISTRO"}" = 'debian' ]; then
+    # Fix launching X11 from inside crosh (user doesn't own a TTY)
+    echo 'allowed_users=anybody' > '/etc/X11/Xwrapper.config'
+fi
+
+# Xorg 1.16 wants to run as normal user, which breaks crouton
+if [ "${DISTROAKA:-"$DISTRO"}" = 'arch' ]; then
+    cat >/etc/X11/Xwrapper.config <<EOF
+allowed_users=anybody
+needs_root_rights=yes
+EOF
+fi
 
 inteldrv='/usr/lib/xorg/modules/drivers/intel_drv.so'
 if [ -n "$freon" -a -e "$inteldrv" ]; then
