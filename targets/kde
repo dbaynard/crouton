@@ -9,8 +9,17 @@ CHROOTBIN='crouton-noroot startkde'
 . "${TARGETSDIR:="$PWD"}/common"
 
 ### Append to prepare.sh:
-install --minimal kde-baseapps kde-runtime plasma-desktop pulseaudio \
-        -- network-manager
+install --minimal arch=,plasma-desktop \
+    arch=kde-meta-kdeadmin, \
+    arch=kde-meta-kdebase,kde-baseapps \
+    arch=kde-meta-kdegraphics, \
+    arch=kde-meta-kdepim, \
+    arch=kde-meta-kdeplasma-addons, \
+    arch=kde-meta-kdeutils, \
+    arch=,kde-runtime \
+    arch=pulseaudio,pulseaudio \
+    arch=kdesdk-kate, \
+    -- network-manager
 
 if release -lt xenial -lt kali -lt stretch; then
     install --minimal kde-workspace
