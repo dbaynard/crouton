@@ -30,17 +30,21 @@ ln -sf croutonpowerd /usr/local/bin/gnome-screensaver-command
 ln -sf croutonpowerd /usr/local/bin/xscreensaver-command
 
 # Install nicer cursors
-install --minimal dmz-cursor-theme
+install --minimal arch=xcursor-vanilla-dmz,dmz-cursor-theme
 
 # Install bsdmainutils, xbindkeys and xautomation for shortcuts
 install --minimal bsdmainutils xbindkeys xautomation
 
 # We need chvt on freon systems
+sudogroup="sudo"
+if [ "${DISTROAKA:-"$DISTRO"}" = 'arch' ]; then
+    sudogroup="wheel"
+fi
 if [ -f "/sys/class/tty/tty0/active" ]; then
     install --minimal kbd
     # Allow users to run sudo chvt without password, so we don't need to run
     # croutoncycle as root
-    echo '%sudo ALL = NOPASSWD:/bin/chvt' > /etc/sudoers.d/chvt
+    echo '%$sudogroup ALL = NOPASSWD:/bin/chvt' > /etc/sudoers.d/chvt
     chmod 440 /etc/sudoers.d/chvt
 fi
 
