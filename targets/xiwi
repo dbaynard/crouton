@@ -62,7 +62,7 @@ wget $superinsecure -O "$DUMMYBUILDTMP/dummy.tar.gz" \
      "$urlbase/xf86-video-dummy-0.3.8.tar.gz"
 
 install --minimal --asdeps patch gcc arch=,libc-dev pkg-config \
-    arch=,xserver-xorg-dev$ltspackages arch=,x11proto-xf86dga-dev
+    arch=xorg-server-devel,xserver-xorg-dev$ltspackages arch=,x11proto-xf86dga-dev
 
 (
     cd "$DUMMYBUILDTMP"
