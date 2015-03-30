@@ -405,6 +405,7 @@ EOF
 
 if [ "${DISTROAKA:-"$DISTRO"}" = 'debian' ]; then
     # Hold xserver-xorg-video-dummy to make sure the driver does not get erased
+<<<<<<< bd2f5350287c602ce0aa4c2cc3d36c9f76956681
 <<<<<<< 6cea89bf597952f60cc98542f8f19957bcca22ed
     apt-mark hold xserver-xorg-video-dummy$ltspackages
 ||||||| merged common ancestors
@@ -413,6 +414,11 @@ if [ "${DISTROAKA:-"$DISTRO"}" = 'debian' ]; then
 =======
     apt-mark hold xserver-xorg-video-dummy
 >>>>>>> Minor fix to broken merge.
+||||||| merged common ancestors
+    apt-mark hold xserver-xorg-video-dummy
+=======
+    apt-mark hold xserver-xorg-video-dummy$ltspackages
+>>>>>>> Added ltspackages variable to dummy video.
 elif [ "${DISTROAKA:-"$DISTRO"}" = 'arch' ]; then
     # FIXME: Add a hold/unhold function
     # Make sure xf86-video-dummy does not get updated
