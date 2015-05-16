@@ -28,6 +28,7 @@ if [ "${DISTROAKA:-"$DISTRO"}" = 'debian' ]; then
     apt-mark unhold xserver-xorg-video-dummy$ltspackages || true 2>/dev/null
 fi
 
+<<<<<<< 0a5054d1e2f781b0834ea163c2699a32d63e83e1
 install xorg arch=xf86-video-dummy,xserver-xorg-video-dummy
 install --minimal arch=i3-wm,i3 arch=i3lock, arch=i3status,
 
@@ -35,6 +36,13 @@ install --minimal arch=i3-wm,i3 arch=i3lock, arch=i3status,
 if release -le precise; then
      sed -i '/#.*#.*#.*#/s/ #......$//;/--release/d' /etc/crouton/xiwi.conf
 fi
+||||||| merged common ancestors
+install xorg arch=xf86-video-dummy,xserver-xorg-video-dummy$ltspackages
+install --minimal i3
+=======
+install xorg arch=xf86-video-dummy,xserver-xorg-video-dummy$ltspackages
+install --minimal arch=i3-wm,i3
+>>>>>>> arch: xiwi: install i3-wm instead of i3
 
 # Compile croutonfbserver
 compile fbserver '-lX11 -lXfixes -lXdamage -lXext -lXtst' \
