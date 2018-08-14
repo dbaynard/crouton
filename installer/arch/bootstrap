@@ -111,7 +111,7 @@ while [ -n "$missing" ]; do
         echo "Cannot find package $package..." 1>&2
         exit 1
     fi
-    repo="${pkg%:*}"
+    repo="${pkg%%:*}"
     pkgver="${pkg#*:}"
     file="`getdbfield "$repo" "$pkgver" "desc" "FILENAME"`"
     mirrorbase="`echo "$MIRROR" | sed -e "s/\\$repo/$repo/" \
@@ -125,7 +125,7 @@ while [ -n "$missing" ]; do
 
     # Get list of dependencies (ignore versions)
     ndep="`getdbfield "$repo" "$pkgver" "desc" "DEPENDS" \
-                     | sed -n 's/^\([^<>=]*\).*$/\1/p' | tr '\n' ' '`"
+                     | sed -n 's/^\([^<>=.]*\)[^.]*$/\1/p' | tr '\n' ' '`"
 
     # Some packages provide virtual packages (e.g. bash provides sh):
     # Add those to the installed list
