@@ -33,6 +33,9 @@ FETCHDIRDB="$tmp/db"
 FETCHDIRPKG="$tmp/packages"
 BOOTSTRAPCHROOT="$tmp/$subdir"
 
+# Apply defaults
+[ -f "installer/arch/defaults" ] && . "installer/arch/defaults"
+
 curlparams=""
 # Display progress bar only if we are outputing to a tty
 if [ -t 2 ]; then
@@ -117,15 +120,16 @@ while [ -n "$missing" ]; do
     tar --warning=no-unknown-keyword -xkf "$FETCHDIRPKG/$file" \
         --exclude=".PKGINFO" --exclude=".MTREE" \
         --exclude=".INSTALL" --exclude=".Changelog" \
+        --exclude=".BUILDINFO" \
         -C "$BOOTSTRAPCHROOT"
 
     # Get list of dependencies (ignore versions)
-    ndep="`getdbfield "$repo" "$pkgver" "depends" "DEPENDS" \
+    ndep="`getdbfield "$repo" "$pkgver" "desc" "DEPENDS" \
                      | sed -n 's/^\([^<>=]*\).*$/\1/p' | tr '\n' ' '`"
 
     # Some packages provide virtual packages (e.g. bash provides sh):
     # Add those to the installed list
-    nprovides="`getdbfield "$repo" "$pkgver" "depends" "PROVIDES" \
+    nprovides="`getdbfield "$repo" "$pkgver" "desc" "PROVIDES" \
                           | tr '\n' ' '`"
 
     bootstrappkg="$bootstrappkg $package"
