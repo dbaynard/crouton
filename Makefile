@@ -54,7 +54,7 @@ $(TARGET): $(WRAPPER) $(BUILDDIR) $(GENVERSION) $(GITHEAD) Makefile
 		sed -e "s/\$$TARPARAMS/$(TARPARAMS)/" \
 			-e "s/VERSION=.*/VERSION='$(shell $(GENVERSION) $(VERSION))'/" \
 			$(WRAPPER) \
-		&& (cd $(BUILDDIR) && tar --owner=root --group=root -c $(TARPARAMS) *)\
+		&& tar --owner=root --group=root -c $(TARPARAMS) $(SCRIPTS) \
 		&& chmod +x /dev/stdout \
 	;} > $(TARGET) || ! rm -f $(TARGET)
 
