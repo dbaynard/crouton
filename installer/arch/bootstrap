@@ -106,7 +106,7 @@ while [ -n "$missing" ]; do
     fi
 
     echo "Downloading and installing $package..." 1>&2
-    pkg="`grep -m 1 ":$package-[0-9]" "$LIST"`"
+    pkg="`grep -m 1 ":$package-[^-]*-[^-]*$" "$LIST"`"
     if [ -z "$pkg" ]; then
         echo "Cannot find package $package..." 1>&2
         exit 1
