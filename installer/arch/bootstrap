@@ -59,6 +59,8 @@ curlretry() {
 mkdir -p "$FETCHDIRDB" "$FETCHDIRPKG" "$BOOTSTRAPCHROOT"
 
 echo "Fetching repository packages list..." 1>&2
+
+echo "Using mirror: ${MIRROR%%/\$*}" 1>&2
 # Fetch Arch package database
 for repo in $REPOS; do
     echo "Fetching $repo..." 1>&2
@@ -105,7 +107,6 @@ while [ -n "$missing" ]; do
         continue
     fi
 
-    echo "Downloading and installing $package..." 1>&2
     pkg="`grep -m 1 ":$package-[^-]*-[^-]*$" "$LIST"`"
     if [ -z "$pkg" ]; then
         echo "Cannot find package $package..." 1>&2
@@ -113,6 +114,9 @@ while [ -n "$missing" ]; do
     fi
     repo="${pkg%%:*}"
     pkgver="${pkg#*:}"
+
+    echo "Downloading and installing $pkgver..." 1>&2
+
     file="`getdbfield "$repo" "$pkgver" "desc" "FILENAME"`"
     mirrorbase="`echo "$MIRROR" | sed -e "s/\\$repo/$repo/" \
                                       -e "s/\\$arch/$ARCH/"`"
