@@ -33,7 +33,7 @@ install --minimal \
     arch=,dmz-cursor-theme \
     arch=ttf-dejavu, \
     arch=,libgl1-mesa-dri \
-    arch=xorg-utils,x11-utils arch=xorg-server-utils,x11-xserver-utils \
+    arch=xorg-apps,x11-utils arch=,x11-xserver-utils \
     arch=xorg-xinput,xinput xterm
 
 # Compile croutoncursor
