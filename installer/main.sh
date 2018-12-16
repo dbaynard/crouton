@@ -752,6 +752,8 @@ while [ -n "$t" ]; do
     fi
 done
 
+echo "Running prepare script at $PREPARE" 1>&2
+
 if [ -f "$PREPARE" ]; then
     # Update .crouton-targets in the unencrypted part of the chroot
     cp -fT "$TARGETDEDUPFILE" "$CHROOTSRC/.crouton-targets"

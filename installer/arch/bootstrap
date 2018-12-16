@@ -28,10 +28,12 @@ if [ "$ARCH" = 'armv7h' ]; then
     PACKAGES_BOOTSTRAP="$PACKAGES_BOOTSTRAP archlinuxarm-keyring"
 fi
 
-LIST="$tmp/list"
-FETCHDIRDB="$tmp/db"
-FETCHDIRPKG="$tmp/packages"
-BOOTSTRAPCHROOT="$tmp/$subdir"
+archbootstrap="$tmp/archbootstrap"
+
+LIST="$archbootstrap/list"
+FETCHDIRDB="$archbootstrap/db"
+FETCHDIRPKG="$archbootstrap/packages"
+BOOTSTRAPCHROOT="$archbootstrap/$subdir"
 
 # Apply defaults
 [ -f "installer/arch/defaults" ] && . "installer/arch/defaults"
