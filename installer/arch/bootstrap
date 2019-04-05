@@ -158,3 +158,40 @@ sed -i 's/^[ \t]*Architecture[ \t].*/Architecture = '"$ARCH"'/' \
 
 echo "$bootstrappkg" > "$BOOTSTRAPCHROOT"/crouton-bootstrap-pkg
 
+# this happens in installer/main.sh, but only after bootstrap has run, and we
+# need it to exist for enter-chroot below to work
+mkdir -p "$BOOTSTRAPCHROOT/etc/crouton"
+
+# Theoretically this _could_ happen within prepare (and it used to), but the
+# enter-chroot call for prepare uses a -xx flag, which causes it to try and set
+# up dbus, which fails because at this point pacman hasn't properly run and
+# therefore hasn't created the dbus user. So we do this crap in here instead.
+sh -e $BINDIR/enter-chroot -x -c "$(dirname $BOOTSTRAPCHROOT)" \
+    -n "$(basename $BOOTSTRAPCHROOT)" \
+    /bin/sh -c "
+        pacman-key --init
+        if [ '${ARCH#arm}' = '$ARCH' ]; then
+            pacman-key --populate archlinux
+        else
+            # archlinuxarm-keyring has been installed as part of bootstrap
+            pacman-key --populate archlinuxarm
+        fi
+
+        # This is modified from inside prepare, which does something similar.
+        # It's needed here too because pacman-mirrorlist.x86_64 comes with no
+        # servers uncommented, and so the pacman calls below fail, even though
+        # they don't actually need to hit the mirrors for anything. MIRROR gets
+        # set in defaults if it's not explicitly set by the user.
+        if [ -n '$MIRROR' -a '$MIRROR' != 'unspecified' ]; then
+            if [ ! -e /etc/pacman.d/mirrorlist.pacorig ]; then
+                cp -T /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.pacorig
+            fi
+
+            echo 'Server = $MIRROR' > /etc/pacman.d/mirrorlist
+        fi
+
+        # Force overwritting packages files in the bootstrap, without any sort
+        # of dependency checking: this makes sure package content are properly
+        # recorded
+        pacman -S --nodeps --asdeps --noconfirm --overwrite '*' $bootstrappkg
+"
